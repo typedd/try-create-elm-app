@@ -1,56 +1,48 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, text, div, h1, img)
-import Html.Attributes exposing (src)
+import Html exposing (Html, button, div, text)
+import Html.Events exposing (onClick)
 
 
----- MODEL ----
+
+-- MAIN
 
 
-type alias Model =
-    {}
+main =
+  Browser.sandbox { init = init, update = update, view = view }
 
 
-init : ( Model, Cmd Msg )
+
+-- MODEL
+
+type alias Model = Int
+
+init : Model
 init =
-    ( {}, Cmd.none )
+  0
 
 
+-- UPDATE
 
----- UPDATE ----
+type Msg = Increment | Decrement
 
-
-type Msg
-    = NoOp
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
+update : Msg -> Model -> Model
 update msg model =
-    ( model, Cmd.none )
+  case msg of
+    Increment ->
+      model + 1
+
+    Decrement ->
+      model - 1
 
 
-
----- VIEW ----
-
+-- VIEW
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ img [ src "/logo.svg" ] []
-        , h1 [] [ text "Your Elm App is working!" ]
-        ]
-
-
-
----- PROGRAM ----
-
-
-main : Program () Model Msg
-main =
-    Browser.element
-        { view = view
-        , init = \_ -> init
-        , update = update
-        , subscriptions = always Sub.none
-        }
+  div []
+    [ button [ onClick Decrement ] [ text "-" ]
+    , div [] [ text (String.fromInt model) ]
+    , button [ onClick Increment ] [ text "+" ]
+    ]
